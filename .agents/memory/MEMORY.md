@@ -1,0 +1,1 @@
+- [FastAPI startup lifecycle](fastapi-startup-lifecycle.md) — critical database bootstrap belongs in lifespan; startup event hooks are inactive when lifespan is configured.
