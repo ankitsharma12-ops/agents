@@ -7,9 +7,10 @@ import random
 import base64
 from pathlib import Path
 from typing import List, Optional
-from user_config import load_dotenv_then_scrub_pwc
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
 
 CACHE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))), "generated_files", "ppt_images")
 STOCK_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "stock_images")

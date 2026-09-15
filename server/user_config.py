@@ -1,8 +1,6 @@
 """Utility to apply user-provided configuration as environment variable overrides."""
 import os
-import json
 from contextlib import contextmanager
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from request_config import scoped_request_config
@@ -55,22 +53,21 @@ def load_dotenv_then_scrub_pwc(*args, **kwargs) -> bool:
     return result
 
 
-_catalog_cache: Optional[dict] = None
-_catalog_mtime: float = 0
-
-
 def _load_catalog() -> dict:
-    """Load agents_catalog.json with simple mtime-based caching."""
-    global _catalog_cache, _catalog_mtime
-    catalog_path = Path(__file__).parent / "agents_catalog.json"
-    if not catalog_path.exists():
+    """Load the live agents catalog from MongoDB (``agents_catalog_db``).
+
+    ``agents_catalog.json`` is only a one-time seed for that collection (see
+    its module docstring) — reading the file directly here meant admin-saved
+    ``default_config`` (e.g. an agent's own PWC GenAI key, set through the
+    Agent Marketplace UI) was silently invisible to every catalog-driven
+    credential lookup below, since the UI saves to MongoDB, not this file.
+    """
+    from agents_catalog_db import get_catalog
+
+    try:
+        return get_catalog(required=False)
+    except Exception:
         return {}
-    mtime = catalog_path.stat().st_mtime
-    if _catalog_cache is None or mtime != _catalog_mtime:
-        with open(catalog_path, "r", encoding="utf-8") as f:
-            _catalog_cache = json.load(f)
-        _catalog_mtime = mtime
-    return _catalog_cache
 
 
 def with_server_config_status(agent: Dict[str, Any]) -> Dict[str, Any]:

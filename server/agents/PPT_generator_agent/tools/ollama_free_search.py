@@ -11,9 +11,9 @@ from typing import Any, Dict, List, Optional
 
 import httpx
 
-from user_config import load_dotenv_then_scrub_pwc
-
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
 
 
 class PPTOllamaFreeSearch:
