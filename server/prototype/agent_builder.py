@@ -163,15 +163,17 @@ def agent_stats(agent_id: str, days: int = 30) -> Dict[str, Any]:
 async def test_agent_stream(agent_id: str, query: str, session_id: Optional[str] = None):
     """Run the saved custom-agent configuration in the test playground.
 
-    The builder API still uses this lightweight store for its CRUD surface, but
-    the playground must exercise the configured prompt and LLM rather than the
-    old prototype response fixture.
+    Reads from the real, persistent agent store (agent_registry) rather than
+    this module's in-memory dict — agents created via the builder UI are
+    stored there, and default_config needs decrypting for the LLM call.
     """
     from datetime import datetime, timezone
     from agents.llm_continuation import set_current_agent, set_current_session
     from api import _llm_call_async
+    from user_config import apply_user_config
+    import agent_registry
 
-    agent = _store.get(agent_id)
+    agent = agent_registry.get_agent_for_runtime(agent_id)
     if not agent:
         async def missing_stream():
             yield f"data: {json.dumps({'event': 'error', 'data': {'message': 'Agent not found'}})}\n\n"
@@ -192,17 +194,18 @@ async def test_agent_stream(agent_id: str, query: str, session_id: Optional[str]
     async def event_stream():
         started = datetime.now(timezone.utc).isoformat()
         yield f"data: {json.dumps({'event': 'start', 'data': {'agent': name, 'timestamp': started}})}\n\n"
-        yield f"data: {json.dumps({'event': 'thinking', 'data': {'type': 'thinking', 'content': 'Applying the configured system prompt and generating a response…'}})}\n\n"
+        yield f"data: {json.dumps({'event': 'thinking', 'data': {'type': 'thinking', 'content': 'Applied the configured system prompt to generate the response above.'}})}\n\n"
 
         try:
             set_current_agent(name)
             set_current_session(sid)
-            response = await _llm_call_async(
-                prompt,
-                max_tokens=max_tokens,
-                temperature=temperature,
-                model=model or None,
-            )
+            with apply_user_config(agent.get("default_config") or {}):
+                response = await _llm_call_async(
+                    prompt,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
+                    model=model or None,
+                )
 
             response = str(response or "").strip()
             if not response:
