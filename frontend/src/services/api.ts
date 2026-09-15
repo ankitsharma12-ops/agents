@@ -727,7 +727,12 @@ export async function generateWorkflow(instruction: string): Promise<any> {
     },
     body: JSON.stringify({ instruction }),
   });
-  if (!response.ok) throw new Error('Failed to generate workflow');
+  if (!response.ok) {
+    const e = await response.json().catch(() => ({}));
+    throw new Error(
+      typeof e.detail === 'string' ? e.detail : `Failed to generate workflow (${response.status})`,
+    );
+  }
   return response.json();
 }
 

@@ -4,7 +4,8 @@ import json
 import os
 import re
 import logging
-from typing import Any, Dict
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 from .catalog import AGENT_REGISTRY
 from .dispatch import _strip_code_fences
@@ -16,6 +17,30 @@ logger = logging.getLogger(__name__)
 # LLM call
 # ---------------------------------------------------------------------------
 
+_PWC_ENV_FALLBACK: Optional[Dict[str, str]] = None
+
+
+def _pwc_fallback_from_dotenv() -> Dict[str, str]:
+    """PwC GenAI credentials read straight from ``server/.env``.
+
+    The API server strips these from the process environment at startup
+    (``user_config.load_dotenv_then_scrub_pwc``) and normally re-injects them
+    per request from an agent's own config. The workflow planner has no
+    per-agent config to inject them from, so it falls back to the same
+    server/.env values api.py keeps as ``_SERVER_GLOBAL_CHAT_CONFIG``.
+    """
+    global _PWC_ENV_FALLBACK
+    if _PWC_ENV_FALLBACK is None:
+        from dotenv import dotenv_values
+
+        env_path = Path(__file__).resolve().parents[2] / ".env"
+        values = dotenv_values(env_path) if env_path.exists() else {}
+        _PWC_ENV_FALLBACK = {
+            k: v for k, v in values.items()
+            if k in ("PWC_GENAI_API_KEY", "PWC_GENAI_BEARER_TOKEN", "PWC_GENAI_ENDPOINT_URL") and v
+        }
+    return _PWC_ENV_FALLBACK
+
 
 async def call_llm(prompt: str, temperature: float = 0.2, max_tokens: int = 4096) -> str:
     """Call the configured LLM endpoint with automatic continuation handling."""
@@ -26,12 +51,18 @@ async def call_llm(prompt: str, temperature: float = 0.2, max_tokens: int = 4096
     except Exception:
         pass
 
-    api_key = os.getenv("PWC_GENAI_API_KEY") or os.getenv("GEMINI_API_KEY")
+    api_key = os.getenv("PWC_GENAI_API_KEY")
     bearer_token = os.getenv("PWC_GENAI_BEARER_TOKEN")
-    endpoint_url = os.getenv(
-        "PWC_GENAI_ENDPOINT_URL",
-        "https://genai-sharedservice-americas.pwc.com/completions",
-    )
+    endpoint_url = os.getenv("PWC_GENAI_ENDPOINT_URL")
+
+    if not api_key:
+        fallback = _pwc_fallback_from_dotenv()
+        api_key = fallback.get("PWC_GENAI_API_KEY")
+        bearer_token = bearer_token or fallback.get("PWC_GENAI_BEARER_TOKEN")
+        endpoint_url = endpoint_url or fallback.get("PWC_GENAI_ENDPOINT_URL")
+
+    api_key = api_key or os.getenv("GEMINI_API_KEY")
+    endpoint_url = endpoint_url or "https://genai-sharedservice-americas.pwc.com/completions"
 
     if not api_key:
         raise ValueError("LLM service not configured. Set PWC_GENAI_API_KEY or GEMINI_API_KEY.")
