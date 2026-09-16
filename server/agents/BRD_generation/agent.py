@@ -4,7 +4,6 @@ from typing import Any, Callable, Dict, Optional
 
 import json
 
-from user_config import load_dotenv_then_scrub_pwc
 from langchain_classic.memory import ConversationBufferMemory
 
 from agents.session_memory import memory_for_session
@@ -48,8 +47,10 @@ def prune_empty(obj: Any) -> Any:
 
 
 # Load .env from the server root directory (PwC GenAI keys stripped — agent config only)
-env_path = Path(__file__).parent.parent.parent / '.env'
-load_dotenv_then_scrub_pwc(dotenv_path=env_path)
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    env_path = Path(__file__).parent.parent.parent / '.env'
+    load_dotenv_then_scrub_pwc(dotenv_path=env_path)
 
 
 BRD_PROMPT_TEMPLATE = """You are a Senior Business Analyst + Solutions Architect drafting a Business Requirements Document (BRD) that a CTO, Product Manager, Designer, and Developer should all be able to read and act on.

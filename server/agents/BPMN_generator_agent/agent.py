@@ -8,12 +8,13 @@ import httpx
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from user_config import load_dotenv_then_scrub_pwc
 from agents.llm_continuation import sync_call_with_continuation_httpx
 
 from .tools.file_extractor import extract_file_content
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
 
 class ConversationMemory:
@@ -387,12 +388,13 @@ import httpx
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from user_config import load_dotenv_then_scrub_pwc
 from agents.llm_continuation import sync_call_with_continuation_httpx
 
 from .tools.file_extractor import extract_file_content
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
 
 class ConversationMemory:
@@ -766,12 +768,13 @@ import httpx
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from user_config import load_dotenv_then_scrub_pwc
 from agents.llm_continuation import sync_call_with_continuation_httpx
 
 from .tools.file_extractor import extract_file_content
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
 
 class ConversationMemory:
@@ -1145,12 +1148,13 @@ import httpx
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from user_config import load_dotenv_then_scrub_pwc
 from agents.llm_continuation import sync_call_with_continuation_httpx
 
 from .tools.file_extractor import extract_file_content
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
 
 class ConversationMemory:

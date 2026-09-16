@@ -21,9 +21,10 @@ except ImportError:
 
 import httpx
 from pathlib import Path
-from user_config import load_dotenv_then_scrub_pwc
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
 
 
 class CompanyPerplexitySearch:

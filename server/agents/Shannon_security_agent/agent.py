@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 
-from user_config import load_dotenv_then_scrub_pwc
 from .ai_service import ai_service
 from .tools.web_context import gather_web_context, summarize_web_context, validate_url
 from .tools.owasp_mapper import get_owasp_checklist, map_finding_to_owasp, OWASP_TOP_10
@@ -16,8 +15,10 @@ from .tools.injection_tester import test_form_injections
 from .tools.method_tester import test_http_methods
 from .tools.cve_lookup import lookup_cves
 
-env_path = Path(__file__).parent.parent.parent / '.env'
-load_dotenv_then_scrub_pwc(dotenv_path=env_path)
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    env_path = Path(__file__).parent.parent.parent / '.env'
+    load_dotenv_then_scrub_pwc(dotenv_path=env_path)
 
 
 class ShannonSecurityAgent:

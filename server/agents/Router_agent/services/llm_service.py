@@ -5,11 +5,12 @@ Handles all LLM API interactions with auto-continuation support.
 
 import os
 from pathlib import Path
-from user_config import load_dotenv_then_scrub_pwc
 from agents.llm_continuation import async_call_with_continuation
 from agents.local_llm import uses_pwc_genai_credentials
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
 
 
 class LLMService:

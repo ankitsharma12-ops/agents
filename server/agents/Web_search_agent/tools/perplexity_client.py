@@ -5,7 +5,6 @@ import httpx
 from typing import List, Dict, Any, Optional
 from pathlib import Path
 from urllib.parse import urlparse
-from user_config import load_dotenv_then_scrub_pwc
 
 try:
     from ddgs import DDGS
@@ -13,7 +12,9 @@ try:
 except ImportError:
     DDGS_AVAILABLE = False
 
-load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
+if not os.getenv("_AGENTSERVER_RUNNING"):
+    from user_config import load_dotenv_then_scrub_pwc
+    load_dotenv_then_scrub_pwc(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
 
 try:
     from agents.source_citation_mandate import WEB_SEARCH_CITATION_APPEND
