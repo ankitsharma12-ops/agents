@@ -65,7 +65,7 @@ def _build_from_catalog() -> Tuple[
         usage = agent.get("usage", {})
         api_endpoint = usage.get("api_endpoint", "")
         endpoint = api_endpoint.split(" ", 1)[-1] if api_endpoint else ""
-        registry[agent_id] = {"name": name, "endpoint": endpoint}
+        registry[agent_id] = {"name": name, "endpoint": endpoint, "description": agent.get("description", "")}
 
         # --- Dispatch ---
         disp = agent.get("dispatch")

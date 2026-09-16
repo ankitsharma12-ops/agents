@@ -95,7 +95,7 @@ class BPMNGeneratorAgent:
                 headers=headers,
                 request_body=payload,
                 original_prompt=prompt,
-                timeout=120.0,
+                timeout=240.0,
             )
         except Exception as e:
             return f"Error calling AI service: {str(e)}"
@@ -475,7 +475,7 @@ class BPMNGeneratorAgent:
                 headers=headers,
                 request_body=payload,
                 original_prompt=prompt,
-                timeout=120.0,
+                timeout=240.0,
             )
         except Exception as e:
             return f"Error calling AI service: {str(e)}"
@@ -855,7 +855,7 @@ class BPMNGeneratorAgent:
                 headers=headers,
                 request_body=payload,
                 original_prompt=prompt,
-                timeout=120.0,
+                timeout=240.0,
             )
         except Exception as e:
             return f"Error calling AI service: {str(e)}"
@@ -1235,7 +1235,7 @@ class BPMNGeneratorAgent:
                 headers=headers,
                 request_body=payload,
                 original_prompt=prompt,
-                timeout=120.0,
+                timeout=240.0,
             )
         except Exception as e:
             return f"Error calling AI service: {str(e)}"

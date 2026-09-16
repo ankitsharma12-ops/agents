@@ -98,10 +98,22 @@ async def call_llm(prompt: str, temperature: float = 0.2, max_tokens: int = 4096
 
 
 def _build_agent_descriptions() -> str:
-    """Return a newline-delimited list of ``- agent_id: Agent Name`` strings."""
-    return "\n".join(
-        f"- {agent_id}: {info['name']}" for agent_id, info in AGENT_REGISTRY.items()
-    )
+    """Return a newline-delimited list of ``- agent_id: Agent Name — description`` strings.
+
+    The description (truncated) is what lets the planner tell apart agents with
+    similar-sounding names but different real capabilities or input requirements
+    (e.g. a file-only formatter vs. a free-text summarizer) — without it, the LLM
+    has only the display name to guess from.
+    """
+    lines = []
+    for agent_id, info in AGENT_REGISTRY.items():
+        desc = (info.get("description") or "").strip().replace("\n", " ")
+        if desc:
+            desc = desc[:220] + ("..." if len(desc) > 220 else "")
+            lines.append(f"- {agent_id}: {info['name']} — {desc}")
+        else:
+            lines.append(f"- {agent_id}: {info['name']}")
+    return "\n".join(lines)
 
 
 # ---------------------------------------------------------------------------

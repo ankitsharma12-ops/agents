@@ -1,0 +1,81 @@
+AGENT MARKETPLACE — 2-MINUTE DEMO VIDEO SCRIPT
+=======================================================================
+
+BUSINESS PROBLEM
+-----------------------------------------------------------------------
+"Today, AI use across the business is scattered — one-off scripts,
+disconnected tools, no visibility into what's being used, what it
+costs, or whether it's safe to scale. Every team is reinventing the
+same automation on their own, with no single place to discover what
+already exists."
+
+OUR SOLUTION
+-----------------------------------------------------------------------
+"That's why we built the Agent Marketplace — one governed platform for
+every AI agent our teams need. Let me open it up. Here you can see all
+31 agents in the catalog, organized into categories — General, Finance,
+SDLC, QA Testing, Telecom, and Security — so instead of hunting around,
+you just search or filter to find exactly the agent built for your
+task."
+
+FEATURES
+-----------------------------------------------------------------------
+"Now let me log in here as an admin. From this view, I can not only
+manage the catalog, users, and access — I can also orchestrate agents
+together. Instead of running one agent at a time, I describe a goal in
+plain language, and the platform automatically plans which agents need
+to run, in what order, passing each agent's output into the next. I
+review the workflow graph, run it, and watch every agent execute in
+sequence with a live, step-by-step trace — no manual hand-offs, no
+copy-pasting between tools. We can also create brand-new agents
+ourselves, right from here — build, test, and publish one, governed by
+an approval queue before it ever goes live. And every agent is exposed
+through an MCP server, so developers can plug the same agents straight
+into their own IDE — like Cursor or VS Code — and call them directly
+from their code."
+
+LIVE AGENT DEMO — ZOHO NEW CUSTOMER AGENT
+-----------------------------------------------------------------------
+"Let's make this concrete. Say sales just closed a new account — I open
+the Zoho New Customer Agent, give it the customer's name, email and
+company, and run it. Watch the live trace: it drafts a personalized
+welcome email and sends it straight from Zoho Mail, schedules the
+introduction call on Zoho Calendar, and opens a follow-up ticket in
+Zoho Desk so nothing falls through the cracks — three systems, one
+request, zero manual work. And because every write is gated behind a
+dry-run preview before it ever touches Zoho, nothing goes out live
+until it's been reviewed."
+
+LIVE AGENT DEMO — ZOHO EMAIL MEETING AGENT
+-----------------------------------------------------------------------
+"One more example. Someone emails asking for 45 minutes next week to
+walk through a project — instead of manually reading it, checking
+calendars, and replying, I hand that email to the Zoho Email Meeting
+Agent. It reads the request straight from Zoho Mail, pulls out who,
+when and why, books the slot on Zoho Calendar, sends the requester a
+confirmation, and opens a Zoho Projects task so the team's ready. What
+took five minutes of back-and-forth now happens the moment the email
+lands."
+
+KEY METRICS
+-----------------------------------------------------------------------
+"And everything here is fully governed: role-based access for admins
+and users, per-agent and per-model cost tracking, usage analytics down
+to geography, and an approval queue for every newly published agent —
+full visibility for IT and leadership."
+
+WHY PwC
+-----------------------------------------------------------------------
+"This is where PwC adds real value — we know this platform because
+we've built it, we bring proven experience delivering enterprise GenAI
+and multi-agent orchestration, we know the underlying tech stack cold,
+and our alliances, like Microsoft, let us extend it further without
+reinventing the wheel."
+
+CLOSING
+-----------------------------------------------------------------------
+"One marketplace. Any agent. Fully orchestrated, fully governed. That's
+the Agent Marketplace."
+
+=======================================================================
+END OF SCRIPT
